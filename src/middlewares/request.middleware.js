@@ -218,7 +218,7 @@ function apiAccessForCreatorUser (req, response, next) {
   var data = {}
   var rspObj = req.rspObj
   var qs = {
-    fields: 'createdBy,collaborators',
+    fields: 'createdBy,collaborators,ORG_ADMIN',
     mode: 'edit'
   }
   var contentMessage = messageUtil.CONTENT
@@ -352,7 +352,7 @@ function hierarchyUpdateApiAccess (req, response, next) {
   var data = req.body
   var rspObj = req.rspObj
   var qs = {
-    fields: 'createdBy,collaborators',
+    fields: 'createdBy,collaborators,ORG_ADMIN',
     mode: 'edit'
   }
   var contentMessage = messageUtil.CONTENT
