@@ -219,7 +219,7 @@ function apiAccessForCreatorUser (req, response, next) {
   var data = {}
   var rspObj = req.rspObj
   var qs = {
-    fields: 'createdBy,collaborators,ORG_ADMIN',
+    fields: 'createdBy,collaborators',
     mode: 'edit'
   }
   var contentMessage = messageUtil.CONTENT
@@ -254,7 +254,7 @@ function apiAccessForCreatorUser (req, response, next) {
     },
     function (res) {
       let createdBy = res.result.content.createdBy.split(':')
-      if (createdBy[createdBy.length - 1] !== userId && !lodash.includes(res.result.content.collaborators, userId) && !isRootOrgAdmin) {
+      if ( (createdBy[createdBy.length - 1] !== userId && !lodash.includes(res.result.content.collaborators, userId)) || !(isRootOrgAdmin) ) {
         rspObj.errCode = reqMsg.TOKEN.INVALID_CODE
         rspObj.errMsg = reqMsg.TOKEN.INVALID_MESSAGE
         rspObj.responseCode = responseCode.UNAUTHORIZED_ACCESS
@@ -353,7 +353,7 @@ function hierarchyUpdateApiAccess (req, response, next) {
   var data = req.body
   var rspObj = req.rspObj
   var qs = {
-    fields: 'createdBy,collaborators,ORG_ADMIN',
+    fields: 'createdBy,collaborators',
     mode: 'edit'
   }
   var contentMessage = messageUtil.CONTENT
