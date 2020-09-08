@@ -27,6 +27,7 @@ function createLock (req, response) {
   var lockId = dbModel.uuid()
   var newDateObj = createExpiryTime()
   var data = req.body
+  var isRootOrgAdmin = lodash.has(req.body.request, "isRootOrgAdmin") ? req.body.request.isRootOrgAdmin : false
   var rspObj = req.rspObj
   var contentBody = ''
   var versionKey = ''
@@ -47,7 +48,7 @@ function createLock (req, response) {
     return response.status(400).send(respUtil.errorResponse(rspObj))
   }
 
-  if ( (req.get('x-authenticated-userid') !== data.request.createdBy) || (data.request.isRootOrgAdmin == false)) {
+  if ( (req.get('x-authenticated-userid') !== data.request.createdBy) || !(isRootOrgAdmin)) {
     rspObj.errCode = contentMessage.CREATE_LOCK.FAILED_CODE
     rspObj.errMsg = contentMessage.CREATE_LOCK.UNAUTHORIZED
     rspObj.responseCode = responseCode.CLIENT_ERROR

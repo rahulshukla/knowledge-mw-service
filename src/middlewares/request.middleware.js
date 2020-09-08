@@ -215,7 +215,8 @@ function validateUserToken (req, res, next) {
 function apiAccessForCreatorUser (req, response, next) {
   logger.debug({ msg: 'apiAccessForCreatorUser() called' }, req)
   var userId = req.get('x-authenticated-userid')
-  var isRootOrgAdmin = lodash.has(req.body.request, isRootOrgAdmin) ? req.body.request.isRootOrgAdmin : false
+  var isRootOrgAdmin = lodash.has(req.body.request, "isRootOrgAdmin") ? req.body.request.isRootOrgAdmin : false
+
   var data = {}
   var rspObj = req.rspObj
   var qs = {
@@ -254,7 +255,7 @@ function apiAccessForCreatorUser (req, response, next) {
     },
     function (res) {
       let createdBy = res.result.content.createdBy.split(':')
-      if ( (createdBy[createdBy.length - 1] !== userId && !lodash.includes(res.result.content.collaborators, userId)) || !(isRootOrgAdmin) ) {
+      if ( (createdBy[createdBy.length - 1] !== userId && !lodash.includes(res.result.content.collaborators, userId)) || !(isRootOrgAdmin)) {
         rspObj.errCode = reqMsg.TOKEN.INVALID_CODE
         rspObj.errMsg = reqMsg.TOKEN.INVALID_MESSAGE
         rspObj.responseCode = responseCode.UNAUTHORIZED_ACCESS
