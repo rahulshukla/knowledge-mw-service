@@ -47,7 +47,7 @@ function createLock (req, response) {
     return response.status(400).send(respUtil.errorResponse(rspObj))
   }
 
-  if (req.get('x-authenticated-userid') !== data.request.createdBy) {
+  if ( (req.get('x-authenticated-userid') !== data.request.createdBy) || (data.request.isRootOrgAdmin == false)) {
     rspObj.errCode = contentMessage.CREATE_LOCK.FAILED_CODE
     rspObj.errMsg = contentMessage.CREATE_LOCK.UNAUTHORIZED
     rspObj.responseCode = responseCode.CLIENT_ERROR
@@ -96,6 +96,7 @@ function createLock (req, response) {
     }, req)
     return response.status(400).send(respUtil.errorResponse(rspObj))
   }
+
 
   // Adding objectData in telemetry
   if (rspObj.telemetryData) {
@@ -720,13 +721,14 @@ function listLock (req, response) {
 }
 
 function validateCreateLockRequestBody (request) {
-  var body = lodash.pick(request, ['resourceId', 'resourceType', 'resourceInfo', 'createdBy', 'creatorInfo'])
+  var body = lodash.pick(request, ['resourceId', 'resourceType', 'resourceInfo', 'createdBy', 'creatorInfo', 'isRootOrgAdmin'])
   var schema = Joi.object().keys({
     resourceId: Joi.string().required(),
     resourceType: Joi.string().required(),
     resourceInfo: Joi.string().required(),
     createdBy: Joi.string().required(),
-    creatorInfo: Joi.string().required()
+    creatorInfo: Joi.string().required(),
+    isRootOrgAdmin: Joi.string().required()
   })
   return Joi.validate(body, schema)
 }
