@@ -62,6 +62,8 @@ function createLock (req, response) {
       additionalInfo: { userId: req.get('x-authenticated-userid'), createdBy: data.request.createdBy }
     }, req)
     return response.status(403).send(respUtil.errorResponse(rspObj))
+  } else {
+    logger.debug({ msg: 'x-authenticated-userid  passed ' }, req)
   }
 
   if (!data.request) {

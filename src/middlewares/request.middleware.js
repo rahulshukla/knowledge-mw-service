@@ -270,6 +270,7 @@ function apiAccessForCreatorUser (req, response, next) {
         }, req)
         return response.status(401).send(respUtil.errorResponse(rspObj))
       } else {
+          logger.debug({ msg: 'request middleware  passed ' }, res)
         next()
       }
     }
