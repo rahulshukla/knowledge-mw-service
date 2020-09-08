@@ -721,14 +721,13 @@ function listLock (req, response) {
 }
 
 function validateCreateLockRequestBody (request) {
-  var body = lodash.pick(request, ['resourceId', 'resourceType', 'resourceInfo', 'createdBy', 'creatorInfo', 'isRootOrgAdmin'])
+  var body = lodash.pick(request, ['resourceId', 'resourceType', 'resourceInfo', 'createdBy', 'creatorInfo'])
   var schema = Joi.object().keys({
     resourceId: Joi.string().required(),
     resourceType: Joi.string().required(),
     resourceInfo: Joi.string().required(),
     createdBy: Joi.string().required(),
-    creatorInfo: Joi.string().required(),
-    isRootOrgAdmin: Joi.string().required()
+    creatorInfo: Joi.string().required()
   })
   return Joi.validate(body, schema)
 }
