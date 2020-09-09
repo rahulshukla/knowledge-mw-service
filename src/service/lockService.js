@@ -37,6 +37,7 @@ function createLock (req, response) {
 
 
   if (!req.get('x-device-id')) {
+    logger.error({ msg: 'error in x-device-id', isRootOrgAdmin })
     rspObj.errCode = contentMessage.CREATE_LOCK.FAILED_CODE
     rspObj.errMsg = contentMessage.CREATE_LOCK.DEVICE_ID_MISSING
     rspObj.responseCode = responseCode.CLIENT_ERROR
@@ -52,6 +53,7 @@ function createLock (req, response) {
   }
 
   if ( (req.get('x-authenticated-userid') !== data.request.createdBy) || !(isRootOrgAdmin)) {
+    logger.error({ msg: 'error in x-authenticated-userid', isRootOrgAdmin })
     rspObj.errCode = contentMessage.CREATE_LOCK.FAILED_CODE
     rspObj.errMsg = contentMessage.CREATE_LOCK.UNAUTHORIZED
     rspObj.responseCode = responseCode.CLIENT_ERROR
@@ -66,10 +68,12 @@ function createLock (req, response) {
     }, req)
     return response.status(403).send(respUtil.errorResponse(rspObj))
   } else {
+    logger.error({ msg: 'success in x-authenticated-userid', isRootOrgAdmin })
     logger.debug({ msg: 'x-authenticated-userid  passed ' }, req)
   }
 
   if (!data.request) {
+    logger.error({ msg: 'error in missing', isRootOrgAdmin })
     rspObj.errCode = contentMessage.CREATE_LOCK.MISSING_CODE
     rspObj.errMsg = contentMessage.CREATE_LOCK.MISSING_MESSAGE
     rspObj.responseCode = responseCode.CLIENT_ERROR
@@ -87,6 +91,7 @@ function createLock (req, response) {
 
   var result = validateCreateLockRequestBody(data.request)
   if (result.error) {
+    logger.error({ msg: 'error in missing lock ', isRootOrgAdmin })
     rspObj.errCode = contentMessage.CREATE_LOCK.MISSING_CODE
     rspObj.errMsg = result.error.details[0].message
     rspObj.responseCode = responseCode.CLIENT_ERROR

@@ -1912,11 +1912,13 @@ function validateContentLock (req, response) {
   }
   contentProvider.getContentUsingQuery(req.body.request.resourceId, qs, req.headers, function (err, res) {
     if (err) {
+      logger.error({ msg: 'validateContentLock got error with getContentUsingQuery', isRootOrgAdmin })
       rspObj.result.validation = false
       rspObj.result.message = 'Unable to fetch content details'
       logger.error({ msg: 'Getting content details failed', err: { err, errMsg: rspObj.result.message } }, req)
       return response.status(500).send(respUtil.errorResponse(rspObj))
     } else if (res && res.responseCode !== responseCode.SUCCESS) {
+      logger.error({ msg: 'validateContentLock got a success', isRootOrgAdmin })
       rspObj.result.validation = false
       rspObj.result.message = res.params.errmsg
       logger.error({ msg: 'Getting content details failed', err: { errMsg: rspObj.result.message }, res }, req)
@@ -1924,12 +1926,14 @@ function validateContentLock (req, response) {
     } else {
       logger.debug({ msg: 'Getting content details success', res }, req)
       if (res.result.content.status !== 'Draft' && req.body.request.apiName !== 'retireLock') {
+        logger.error({ msg: 'validateContentLock is in draft', isRootOrgAdmin })
         rspObj.result.validation = false
         rspObj.result.message = 'The operation cannot be completed as content is not in draft state'
         logger.warn({ msg: 'The operation cannot be completed as content is not in draft state' }, req)
         return response.status(200).send(respUtil.successResponse(rspObj))
       } else if ( (res.result.content.createdBy !== userId &&
         !lodash.includes(res.result.content.collaborators, userId)) || !(isRootOrgAdmin) ) {
+        logger.error({ msg: 'validateContentLock is under unautharized', isRootOrgAdmin })  
         rspObj.result.validation = false
         rspObj.result.message = 'You are not authorized'
         logger.error({
@@ -1939,6 +1943,7 @@ function validateContentLock (req, response) {
         }, req)
         return response.status(200).send(respUtil.successResponse(rspObj))
       } else {
+        logger.error({ msg: 'validateContentLock is validated', isRootOrgAdmin })  
         logger.error({ msg: 'validateContentLock validated', additionalInfo: { rspObj } }, req)
         rspObj.result.validation = true
         rspObj.result.message = 'Content successfully validated'
