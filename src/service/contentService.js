@@ -1903,6 +1903,7 @@ function searchPluginsAPI (req, response, objectType) {
 
 function validateContentLock (req, response) {
   var rspObj = req.rspObj
+  var isRootOrgAdmin = lodash.has(req.body.request, "isRootOrgAdmin") ? req.body.request.isRootOrgAdmin : false
   var userId = req.get('x-authenticated-userid')
   logger.debug({ msg: 'contentService.validateContentLock() called', additionalInfo: { rspObj } }, req)
   var qs = {
@@ -1926,8 +1927,8 @@ function validateContentLock (req, response) {
         rspObj.result.message = 'The operation cannot be completed as content is not in draft state'
         logger.warn({ msg: 'The operation cannot be completed as content is not in draft state' }, req)
         return response.status(200).send(respUtil.successResponse(rspObj))
-      } else if (res.result.content.createdBy !== userId &&
-        !lodash.includes(res.result.content.collaborators, userId)) {
+      } else if ( (res.result.content.createdBy !== userId &&
+        !lodash.includes(res.result.content.collaborators, userId)) || !(isRootOrgAdmin) ) {
         rspObj.result.validation = false
         rspObj.result.message = 'You are not authorized'
         logger.error({
