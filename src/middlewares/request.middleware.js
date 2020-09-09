@@ -216,7 +216,7 @@ function apiAccessForCreatorUser (req, response, next) {
   logger.debug({ msg: 'apiAccessForCreatorUser() called' }, req)
   var userId = req.get('x-authenticated-userid')
   var isRootOrgAdmin = lodash.has(req.body.request, "isRootOrgAdmin") ? req.body.request.isRootOrgAdmin : false
-  logger.message('apiAccessForCreatorUser has been called with isRootOrgAdmin' + isRootOrgAdmin)
+  logger.error({ msg: 'apiAccessForCreatorUser has been called with isRootOrgAdmin', additionalInfo: { rspObj } }, req)
   var data = {}
   var rspObj = req.rspObj
   var qs = {
@@ -270,7 +270,8 @@ function apiAccessForCreatorUser (req, response, next) {
         }, req)
         return response.status(401).send(respUtil.errorResponse(rspObj))
       } else {
-          logger.message('apiAccessForCreatorUser has been passed')
+        
+        logger.error({ msg: 'apiAccessForCreatorUser passed', req })
           logger.debug({ msg: 'request middleware  passed ' }, res)
         next()
       }

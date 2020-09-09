@@ -32,7 +32,7 @@ function createLock (req, response) {
   var rspObj = req.rspObj
   var contentBody = ''
   var versionKey = ''
-  logger.message('create lock has been called with isRootOrgAdmin' + isRootOrgAdmin)
+  logger.error({ msg: 'create lock has been called with isRootOrgAdmin', additionalInfo: { rspObj } }, req)
   logger.debug({ msg: 'lockService.createLock() called', additionalInfo: { rspObj } }, req)
 
 

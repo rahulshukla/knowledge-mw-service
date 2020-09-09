@@ -1905,7 +1905,7 @@ function validateContentLock (req, response) {
   var rspObj = req.rspObj
   var isRootOrgAdmin = lodash.has(req.body.request, "isRootOrgAdmin") ? req.body.request.isRootOrgAdmin : false
   var userId = req.get('x-authenticated-userid')
-  logger.message('validateContentLock has been called with isRootOrgAdmin' + isRootOrgAdmin)
+  logger.error({ msg: 'validateContentLock has been called with isRootOrgAdmin', isRootOrgAdmin })
   logger.debug({ msg: 'contentService.validateContentLock() called', additionalInfo: { rspObj } }, req)
   var qs = {
     mode: 'edit'
@@ -1939,7 +1939,7 @@ function validateContentLock (req, response) {
         }, req)
         return response.status(200).send(respUtil.successResponse(rspObj))
       } else {
-        logger.message('validateContentLock validated ')
+        logger.error({ msg: 'validateContentLock validated', additionalInfo: { rspObj } }, req)
         rspObj.result.validation = true
         rspObj.result.message = 'Content successfully validated'
         rspObj.result.contentdata = res.result.content
