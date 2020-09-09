@@ -24,6 +24,7 @@ var defaultLockExpiryTime = parseInt(configUtil.getConfig('LOCK_EXPIRY_TIME'))
 var contentProvider = require('sb_content_provider_util')
 
 function createLock (req, response) {
+  
   var lockId = dbModel.uuid()
   var newDateObj = createExpiryTime()
   var data = req.body
@@ -31,7 +32,9 @@ function createLock (req, response) {
   var rspObj = req.rspObj
   var contentBody = ''
   var versionKey = ''
+  logger.message('create lock has been called with isRootOrgAdmin' + isRootOrgAdmin)
   logger.debug({ msg: 'lockService.createLock() called', additionalInfo: { rspObj } }, req)
+
 
   if (!req.get('x-device-id')) {
     rspObj.errCode = contentMessage.CREATE_LOCK.FAILED_CODE
